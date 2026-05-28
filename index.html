@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santiago Ares | Fotografía & Comunicación</title>
+    <!-- Fuentes Modernas -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #000000;
+            --accent-color: #FF0000;
+            --text-principal: #FFFFFF;
+            --text-secundario: #A0A0A0;
+            --card-bg: #121212;
+            --card-hover: #1A1A1A;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-principal);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1020px;
+            text-align: center;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 55vh;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.05) 70%, rgba(0,0,0,0) 100%), url('profile/perfil-fondo.jpg') center/cover no-repeat;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 24px;
+            align-items: center;
+            padding: 40px;
+            min-height: 55vh;
+        }
+
+        .bio-panel,
+        .profile-carousel {
+            background: rgba(18, 18, 18, 0.88);
+            border: 1px solid rgba(255, 0, 0, 0.18);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(6px);
+        }
+
+        .bio-panel header {
+            margin-bottom: 20px;
+        }
+
+        .profile-carousel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .profile-carousel h3 {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        .profile-slide {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .profile-slide img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .profile-slide img.active {
+            opacity: 1;
+        }
+
+        .profile-indicators {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .profile-indicators button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .profile-indicators button.active {
+            background: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        header {
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        h1 span {
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secundario);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .bio {
+            font-size: 0.95rem;
+            color: var(--text-secundario);
+            text-align: justify;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            margin-bottom: 30px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border: 1px solid #222;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .carousel-slide img.active {
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-principal);
+            border: 1px solid var(--accent-color);
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .carousel-btn:hover,
+        .carousel-btn:focus {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            outline: none;
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        .links-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            color: var(--text-principal);
+            text-decoration: none;
+            padding: 18px 25px;
+            border-radius: 8px;
+            border: 1px solid #222;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .link-card i {
+            font-size: 1.4rem;
+            margin-right: 20px;
+            width: 25px;
+            text-align: center;
+            color: var(--accent-color);
+        }
+
+        .link-card:hover,
+        .link-card:focus {
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+            background: var(--card-hover);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.15);
+            outline: none;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+            font-size: 0.9rem;
+            color: var(--text-secundario);
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        @media (max-width: 920px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 24px 16px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 1.9rem;
+            }
+
+            .hero-grid {
+                padding: 24px;
+            }
+
+            .carousel-container {
+                height: 260px;
+            }
+
+            .carousel-btn {
+                padding: 10px 14px;
+                font-size: 1rem;
+            }
+
+            .link-card {
+                padding: 16px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <section class="hero" aria-label="Presentación de Santiago Ares">
+                <div class="hero-grid">
+                    <div class="bio-panel">
+                        <header>
+                            <h1>Santiago <span>Ares</span></h1>
+                            <div class="subtitle">Fotografía & Comunicación Digital</div>
+                        </header>
+                        <p class="bio">
+                            Estudiante avanzado en proceso de licenciatura en Fotografía en la Facultad de Artes (UDELAR) y creador de contenido visual enfocado en la narrativa escénica, política y deportiva. Con experiencia en prensa fotográfica internacional (Lateinamerika Nachrichten, Berlín) y exposiciones respaldadas por la Intendencia de Montevideo, combino el registro fotográfico profesional con la gestión de comunidades digitales y el marketing visual.
+                        </p>
+                    </div>
+
+                    <div class="profile-carousel" aria-labelledby="profile-title">
+                        <h3 id="profile-title">Fotos de perfil</h3>
+                        <div class="profile-slide">
+                            <img src="profile/perfil1.jpg" class="active" alt="Foto de perfil de Santiago Ares 1">
+                            <img src="profile/perfil2.jpg" alt="Foto de perfil de Santiago Ares 2">
+                            <img src="profile/perfil3.jpg" alt="Foto de perfil de Santiago Ares 3">
+                        </div>
+                        <div class="profile-indicators">
+                            <button class="active" aria-label="Mostrar foto 1" onclick="setProfileSlide(0)"></button>
+                            <button aria-label="Mostrar foto 2" onclick="setProfileSlide(1)"></button>
+                            <button aria-label="Mostrar foto 3" onclick="setProfileSlide(2)"></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="portfolio-title">
+                <h2 id="portfolio-title" class="section-title">Portafolio</h2>
+                <div class="carousel-container">
+                    <div class="carousel-slide"></div>
+                    <button class="carousel-btn prev" type="button" aria-label="Anterior slide" onclick="changeSlide(-1)">&#10094;</button>
+                    <button class="carousel-btn next" type="button" aria-label="Siguiente slide" onclick="changeSlide(1)">&#10095;</button>
+                </div>
+            </section>
+
+            <section aria-labelledby="links-title">
+                <h2 id="links-title" class="section-title">Enlaces & Proyectos</h2>
+                <div class="links-section">
+                    <a href="https://santiagoaresportfolio.netlify.app/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fas fa-user-astronaut"></i> Portafolio
+                    </a>
+                    <a href="https://www.linkedin.com/in/santiago-ares-21a848245/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fab fa-linkedin-in"></i> LinkedIn Profesional
+                    </a>
+                    <a href="https://www.instagram.com/ph.ares/?hl=es-la" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://www.youtube.com/@SantiagoAres" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </a>
+                    <a href="https://www.tiktok.com/@ph.ares" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                    <a href="https://archivopopular.github.io/bio_santiagoares.html" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fas fa-archive"></i> Archivo Popular
+                    </a>
+                    <a href="https://sites.google.com/view/fotoperiodismo-en-uruguay/inicio?authuser=1" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <i class="fas fa-camera-retro"></i> Nota Fotoperiodismo Moderno
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Montevideo, Uruguay</p>
+            <p>Contacto directo: <a href="mailto:santiagoares3@gmail.com">santiagoares3@gmail.com</a> | 097 966 686</p>
+        </footer>
+    </div>
+
+    <script>
+        const portfolioImages = [
+            'images/SaveClip.App_497371791_18023541902683496_7556290556199258907_n.jpg',
+            'images/SaveClip.App_538214811_18035417933683496_5507911889349728260_n.jpg',
+            'images/SaveClip.App_538625417_18035417834683496_5089142027195780885_n.jpg',
+            'images/SaveClip.App_554554128_18039306875683496_7913783753305255285_n.jpg',
+            'images/SaveClip.App_610327035_18050650871683496_7472932611592942492_n.jpg',
+            'images/SaveClip.App_655148855_18107511112875545_4162268901168823615_n.jpg',
+            'images/SaveClip.App_655241145_18094550486014556_4051590941733537051_n.jpg',
+            'images/SaveClip.App_656232445_17993908997765265_7651631731881788613_n.jpg',
+            'images/SaveClip.App_657268493_18454502800110172_6120671430465069551_n.jpg',
+            'images/SaveClip.App_662123093_18218989207326091_8805107717964329305_n.jpg',
+            'images/SaveClip.App_663188731_18580242943063757_650397778248785950_n.jpg',
+            'images/SaveClip.App_702397788_18067555616683496_3273570572088366391_n.jpg',
+            'images/SaveClip.App_702659484_18067555556683496_4798269038955002657_n.jpg',
+            'images/SaveClip.App_703587330_18067555592683496_4353684678627125970_n.jpg',
+            'images/SaveClip.App_705350579_18067555703683496_1098522533490519491_n.jpg',
+            'images/SaveClip.App_705365381_18067555547683496_1333002633992778084_n.jpg',
+            'images/SaveClip.App_707739288_18068514329683496_8206185382665084401_n.jpg',
+            'images/SaveClip.App_707854753_18068514362683496_5437762201711349396_n.jpg',
+            'images/SaveClip.App_708442205_18068514392683496_8965305382909590698_n.jpg',
+            'images/SaveClip.App_708993459_18068514308683496_8674024565936971138_n.jpg'
+        ];
+
+        let currentSlide = 0;
+        let currentProfile = 0;
+        let profileSlides = [];
+        let profileButtons = [];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initPortfolioCarousel() {
+            shuffleArray(portfolioImages);
+            const slideContainer = document.querySelector('.carousel-slide');
+            slideContainer.innerHTML = '';
+
+            portfolioImages.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Fotografía de Santiago Ares';
+                img.addEventListener('error', () => {
+                    img.remove();
+                    const remaining = getPortfolioSlides();
+                    if (currentSlide >= remaining.length) {
+                        currentSlide = 0;
+                    }
+                    updatePortfolioSlides();
+                });
+                if (index === 0) img.classList.add('active');
+                slideContainer.appendChild(img);
+            });
+            currentSlide = 0;
+        }
+
+        function getPortfolioSlides() {
+            return document.querySelectorAll('.carousel-slide img');
+        }
+
+        function updatePortfolioSlides() {
+            const slides = getPortfolioSlides();
+            slides.forEach((img, index) => {
+                img.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function changeSlide(direction) {
+            const slides = getPortfolioSlides();
+            if (!slides.length) return;
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+            updatePortfolioSlides();
+        }
+
+        function initProfileCarousel() {
+            profileSlides = document.querySelectorAll('.profile-slide img');
+            profileButtons = document.querySelectorAll('.profile-indicators button');
+            profileSlides.forEach((img, index) => {
+                if (index === 0) {
+                    img.classList.add('active');
+                    profileButtons[index].classList.add('active');
+                }
+            });
+        }
+
+        function setProfileSlide(index) {
+            profileSlides[currentProfile].classList.remove('active');
+            profileButtons[currentProfile].classList.remove('active');
+            currentProfile = index;
+            profileSlides[currentProfile].classList.add('active');
+            profileButtons[currentProfile].classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initPortfolioCarousel();
+            initProfileCarousel();
+
+            setInterval(() => {
+                changeSlide(1);
+            }, 5000);
+
+            setInterval(() => {
+                const next = (currentProfile + 1) % profileSlides.length;
+                setProfileSlide(next);
+            }, 4500);
+        });
+    </script>
+</body>
+</html>
